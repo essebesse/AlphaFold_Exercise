@@ -10,12 +10,12 @@ Static site, no build step. Deployed on Vercel straight from this repo.
 ## Layout
 
 ```
-index.html      the site (three tabs: Start here, Part 1, Part 2)
+index.html      the site (tabs: Start here, Part 1, Part 2, Server not working?)
 style.css
 app.js          tabs, copy buttons, sequence trimmer
 pdf/            the PDF handouts (same content and section numbers)
 assets/         figures used in the page
-downloads/      offline fallback results, in case the AF3 server is down
+downloads/      offline fallback results, linked only from the "Server not working?" tab
 ```
 
 Deep links work for tabs (`#part1`, `#part2`) and sections (`#p1-s6`, `#p2-s4`, ...).

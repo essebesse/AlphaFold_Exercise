@@ -14,7 +14,7 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+html { scroll-padding-top: 64px; }
 
 body {
   margin: 0;
@@ -32,13 +32,13 @@ code { font-size: 0.88em; background: var(--grey); padding: 1px 5px; border-radi
 
 /* ---------- header + tabs ---------- */
 .site-header { background: var(--blue); color: #fff; }
-.site-header .wrap:first-child { padding-block: 28px 18px; }
+.site-header .wrap { padding-block: 28px 14px; }
 .site-header h1 { margin: 2px 0 2px; font-size: 1.9rem; line-height: 1.2; }
 .site-header .sub { margin: 0; opacity: 0.85; }
 .eyebrow { margin: 0; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8; }
 
+.tabbar { background: var(--blue); position: sticky; top: 0; z-index: 10; padding-top: 6px; }
 .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
-.site-header { position: sticky; top: calc(-1 * var(--hdr, 120px)); z-index: 10; }
 .tabs a {
   padding: 10px 16px; color: #fff; text-decoration: none; font-weight: 600; font-size: 0.95rem;
   border-radius: var(--radius) var(--radius) 0 0; opacity: 0.8;

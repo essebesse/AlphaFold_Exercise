@@ -1,5 +1,5 @@
 // ---------- tabs (hash based, so #part1 / #part2 links can be shared) ----------
-const TABS = ["start", "part1", "part2"];
+const TABS = ["start", "part1", "part2", "offline"];
 
 function tabFor(hash) {
   const id = (hash || "").replace("#", "");
@@ -25,14 +25,6 @@ showTab();
 // deep links into a hidden panel: scroll again once layout and images have settled
 window.addEventListener("load", () => { const { anchor } = tabFor(location.hash); if (anchor) anchor.scrollIntoView(); });
 
-// keep the tab bar visible when scrolling: the header slides up by its own height minus the tabs
-function setHeaderOffset() {
-  const header = document.querySelector(".site-header");
-  const tabs = document.querySelector(".tabs");
-  header.style.setProperty("--hdr", (header.offsetHeight - tabs.offsetHeight) + "px");
-}
-window.addEventListener("resize", setHeaderOffset);
-setHeaderOffset();
 
 // ---------- copy to clipboard ----------
 const toast = document.getElementById("toast");

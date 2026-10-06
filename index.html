@@ -15,12 +15,15 @@
     <h1>AI Structure Prediction Workshop</h1>
     <p class="sub">Computer exercises with the AlphaFold3 server and PyMOL</p>
   </div>
+</header>
+<div class="tabbar">
   <nav class="tabs wrap" role="tablist" aria-label="Exercise sections">
     <a role="tab" href="#start" data-tab="start">Start here</a>
     <a role="tab" href="#part1" data-tab="part1">Part 1 · ARL13B</a>
     <a role="tab" href="#part2" data-tab="part2">Part 2 · IFT52:IFT46</a>
+    <a role="tab" href="#offline" data-tab="offline">Server not working?</a>
   </nav>
-</header>
+</div>
 
 <main class="wrap">
 
@@ -34,7 +37,7 @@
     <ul>
       <li><strong>A laptop</strong> with a web browser.</li>
       <li><strong>A Google account</strong>, already signed in. We use it for the free AlphaFold3 server (<a href="https://alphafoldserver.com" target="_blank" rel="noopener">alphafoldserver.com</a>); nothing to install, it runs in the browser.</li>
-      <li><strong>PyMOL</strong> installed, and opened once to check it launches. Free educational build for Windows and Mac: <a href="https://pymol.org/edu/" target="_blank" rel="noopener">pymol.org/edu</a>. The download link arrives by email, so request it a few days ahead.</li>
+      <li><strong>PyMOL</strong> installed, and opened once to check it launches. Free educational build for Windows and Mac: <a href="https://pymol.org/edu/" target="_blank" rel="noopener">pymol.org/edu</a>. The download link is sent by email, so request it ahead of the session.</li>
     </ul>
   </div>
 
@@ -59,13 +62,7 @@
     <a class="btn" href="pdf/IFT_complex_exercise.pdf" target="_blank" rel="noopener">Part 2 PDF</a>
   </div>
 
-  <h2 id="fallback">AlphaFold3 server not working?</h2>
-  <p>If the server, the WiFi or the Google login fails on the day, you can still do every step of the analysis from pre-computed results. Download the zip for the step you are on, unzip it, and carry on with the exercise as written. Each zip has a short README.</p>
-  <ul class="downloads">
-    <li><a class="btn small" href="downloads/ARL13B_results.zip" download>ARL13B_results.zip</a><span class="what">Part 1: both ARL13B jobs (apo and GTP + Mg<sup>2+</sup>), five models each, plus the PAE plot.</span><span class="size">1.0 MB</span></li>
-    <li><a class="btn small" href="downloads/IFT52_46_results.zip" download>IFT52_46_results.zip</a><span class="what">Part 2, Sections 3–4: the full-length IFT52 + IFT46 job, top model, scores and PAE plot.</span><span class="size">1.2 MB</span></li>
-    <li><a class="btn small" href="downloads/IFT52_46_trunc_results.zip" download>IFT52_46_trunc_results.zip</a><span class="what">Part 2, Sections 5–6: the truncated job and the 4UZZ crystal structure. Open it only after you have chosen your own residue ranges.</span><span class="size">0.7 MB</span></li>
-  </ul>
+  <p>If the AlphaFold3 server is down on the day, see the <a href="#offline">Server not working?</a> tab.</p>
 
   <h2>Useful links</h2>
   <ul class="links">
@@ -139,7 +136,6 @@
   </div>
 
   <div class="box note"><span class="lbl">Note</span> Each job may take a few minutes to a while depending on server load. Time for a short introduction to AlphaFold3 while your jobs are running.</div>
-  <div class="box info fallback"><strong>Server not working?</strong> Download the pre-computed results instead: <a href="downloads/ARL13B_results.zip" download>ARL13B_results.zip</a> (1.0 MB, both jobs).</div>
 
   <h3 class="sec" id="p1-s4"><span class="n">4</span>While it runs: what is AlphaFold doing?</h3>
   <p>AlphaFold does not simulate folding. It has learned, from the whole Protein Data Bank, to predict 3D coordinates directly from sequence and from an alignment of related sequences. Crucially it also predicts <em>how confident it is</em>:</p>
@@ -262,7 +258,6 @@ show sticks, (switchI or switchII) and not name C+N+O</pre></div>
   <h3 class="sec" id="p2-s3"><span class="n">3</span>Examine your complex</h3>
   <h4 class="subsec"><span class="n">3.1</span>Open the top model and its PAE</h4>
   <div class="box task"><span class="lbl">Task</span> Download the <code>IFT52_46</code> results and unpack the zip. Open the top-ranked model (the <code>…model_0.cif</code> file) in PyMOL, and on the AF3 server open the <strong>PAE plot</strong> for the same job.</div>
-  <div class="box info fallback"><strong>Server not working?</strong> Download the pre-computed full-length result: <a href="downloads/IFT52_46_results.zip" download>IFT52_46_results.zip</a> (1.2 MB, top model, scores and PAE plot).</div>
   <div class="box task"><span class="lbl">Question</span> Is the whole inter-chain region of the PAE light, or is there a <em>compact dark block</em> somewhere in it? If there is a block, which stretch of each chain does it cover? Putting the plot together with the structure, do the two proteins interact, and if so, which parts of them?</div>
 
   <h4 class="subsec"><span class="n">3.2</span>Now read the ipTM</h4>
@@ -302,7 +297,6 @@ zoom ifaceA or ifaceB</pre></div>
 
   <div class="box task"><span class="lbl">Question</span> Before it finishes, <strong>predict</strong>: what will happen to the ipTM now that the non-interacting parts are gone, and what will happen to the <em>shape</em> of the PAE plot? When the job returns, compare it with the full-length result. Were you right? What does the change tell you about what the ipTM was actually measuring before?</div>
   <div class="box note"><span class="lbl">Note</span> The truncated prediction takes a while to come back. While it runs you do not need to wait: read the final section (a word of caution), and, if you like, try the optional interface analysis below. Return here to compare the two results once the truncated job finishes.</div>
-  <div class="box info fallback"><strong>Server not working?</strong> Once you have chosen your residue ranges, download the pre-computed truncated result: <a href="downloads/IFT52_46_trunc_results.zip" download>IFT52_46_trunc_results.zip</a> (0.7 MB, also contains <code>4uzz.pdb</code> for Section 6).</div>
 
   <h3 class="sec" id="p2-s6"><span class="n">6</span>A prediction still needs validation</h3>
   <p>Everything so far builds confidence: you found a compact interface, the PAE backed it up, and truncating to it pushed the ipTM from low to confident. But all of this is still a <strong>prediction</strong>. A convincing PAE and a good ipTM make a strong hypothesis, not a proven fact. Before you build on a predicted interface, it has to be tested experimentally: treat every AlphaFold complex as a lead to be confirmed, not as the answer.</p>
@@ -326,6 +320,43 @@ super &lt;your model&gt;, 4uzz</pre></div>
     <p>One thing in this recipe punishes a small interface on large proteins: find it and fix it. Then ask whether <var>d</var><sub>0</sub>, which depends on <var>N</var>, still makes sense for the residues you are now scoring, and adjust it. Write your own score. Test it on both your full-length and your truncated prediction: does your score give similar values for the two, where the ipTM did not?</p>
     <p class="ref">See Dunbrack, R.L. (2025). Rēs ipSAE loquunt: What's wrong with AlphaFold's ipTM score and how to fix it. bioRxiv, <a href="https://doi.org/10.1101/2025.02.10.637595" target="_blank" rel="noopener">doi:10.1101/2025.02.10.637595</a>, for help.</p>
   </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- OFFLINE / SERVER NOT WORKING                                      -->
+<!-- ================================================================= -->
+<section id="tab-offline" class="panel" role="tabpanel" hidden>
+
+  <div class="part-head">
+    <p class="eyebrow">Only if needed</p>
+    <h2 class="title">AlphaFold3 server not working?</h2>
+    <p class="sub">pre-computed results for both exercises</p>
+  </div>
+
+  <p>If the AlphaFold3 server, the WiFi or the Google login fails on the day, you can still do every step of the analysis. Download the results below, unzip them, and carry on with the exercise as written. These are the same files the server would give you. Each zip also contains a short README.</p>
+
+  <h3 class="sec">Part 1 · ARL13B</h3>
+  <ul class="downloads">
+    <li><a class="btn small" href="downloads/ARL13B_results.zip" download>ARL13B_results.zip</a><span class="what">Both jobs: <code>ARL13B_apo</code> and <code>ARL13B_GTP</code> (GTP + Mg<sup>2+</sup>), five models and their scores each, plus the PAE plot of the GTP job.</span><span class="size">1.0 MB</span></li>
+  </ul>
+  <ul>
+    <li>Use these in place of the server results from Section 5 onwards.</li>
+    <li>Without the server's 3D viewer, do the Section 5 question in PyMOL instead: load the apo models and colour them by pLDDT with the command in Section 7.</li>
+    <li>The scores are in the <code>*_summary_confidences_0.json</code> files: open one in a text editor and look for <code>"ptm"</code> (and, in the GTP job, <code>"iptm"</code>).</li>
+    <li>For the optional PAE section, open <code>PAE_ARL13B_GTP_Mg.png</code> in place of the server's PAE viewer.</li>
+  </ul>
+
+  <h3 class="sec">Part 2 · IFT52:IFT46</h3>
+  <ul class="downloads">
+    <li><a class="btn small" href="downloads/IFT52_46_results.zip" download>IFT52_46_results.zip</a><span class="what">The full-length complex (Sections 3–4): top model, scores and PAE plot.</span><span class="size">1.2 MB</span></li>
+    <li><a class="btn small" href="downloads/IFT52_46_trunc_results.zip" download>IFT52_46_trunc_results.zip</a><span class="what">The truncated complex (Sections 5–6), plus the 4UZZ crystal structure. Open it only after you have chosen your own residue ranges in Section 5. Its README explains how the residues are numbered.</span><span class="size">0.7 MB</span></li>
+  </ul>
+  <ul>
+    <li>In both models, chain A = IFT52 and chain B = IFT46.</li>
+    <li>The ipTM is in the <code>*_summary_confidences_0.json</code> file (look for <code>"iptm"</code>). Open the <code>PAE_*.png</code> plot in place of the server's PAE viewer; residue numbers are on the axes.</li>
+    <li>The PAE practice in Section 2 already works offline: the GNE and SRC plots are shown on the page.</li>
+    <li>For Section 6 without internet, use <code>load 4uzz.pdb</code> (from the zip) in PyMOL in place of <code>fetch 4uzz</code>.</li>
+  </ul>
 </section>
 
 </main>
