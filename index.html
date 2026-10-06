@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlphaFold Exercises · Cilia Connect 2026</title>
+<meta name="description" content="Computer exercises for the AI structure prediction workshop, Cilia Connect 2026, Bonn.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <p class="eyebrow">Cilia Connect 2026 · University of Bonn</p>
+    <h1>AI Structure Prediction Workshop</h1>
+    <p class="sub">Computer exercises with the AlphaFold3 server and PyMOL</p>
+  </div>
+  <nav class="tabs wrap" role="tablist" aria-label="Exercise sections">
+    <a role="tab" href="#start" data-tab="start">Start here</a>
+    <a role="tab" href="#part1" data-tab="part1">Part 1 · ARL13B</a>
+    <a role="tab" href="#part2" data-tab="part2">Part 2 · IFT52:IFT46</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ================================================================= -->
+<!-- START                                                             -->
+<!-- ================================================================= -->
+<section id="tab-start" class="panel" role="tabpanel">
+
+  <div class="box info">
+    <h3>What you need (please prepare before the session)</h3>
+    <ul>
+      <li><strong>A laptop</strong> with a web browser.</li>
+      <li><strong>A Google account</strong>, already signed in. We use it for the free AlphaFold3 server (<a href="https://alphafoldserver.com" target="_blank" rel="noopener">alphafoldserver.com</a>); nothing to install, it runs in the browser.</li>
+      <li><strong>PyMOL</strong> installed, and opened once to check it launches. Free educational build for Windows and Mac: <a href="https://pymol.org/edu/" target="_blank" rel="noopener">pymol.org/edu</a>. The download link arrives by email, so request it a few days ahead.</li>
+    </ul>
+  </div>
+
+  <h2>Two exercises</h2>
+  <div class="cards">
+    <a class="card" href="#part1">
+      <span class="card-tag">Part 1</span>
+      <strong>Predicting the structure of a ciliary GTPase</strong>
+      <span>ARL13B alone and with GTP + Mg<sup>2+</sup>. Reading pLDDT, pTM, the five models, and a first look at the PAE.</span>
+    </a>
+    <a class="card" href="#part2">
+      <span class="card-tag">Part 2</span>
+      <strong>Predicting and validating a complex</strong>
+      <span>The IFT52:IFT46 interaction. Reading the PAE and ipTM, finding the interface, and testing it with a minimal complex.</span>
+    </a>
+  </div>
+
+  <h2>Web page or PDF</h2>
+  <p>This site and the PDF handouts contain the same exercises with the same section numbers, so you can switch between them at any point. The web version has copy buttons for the sequences and PyMOL commands.</p>
+  <div class="pdf-row">
+    <a class="btn" href="pdf/ARL13B_exercise.pdf" target="_blank" rel="noopener">Part 1 PDF</a>
+    <a class="btn" href="pdf/IFT_complex_exercise.pdf" target="_blank" rel="noopener">Part 2 PDF</a>
+  </div>
+
+  <h2 id="fallback">AlphaFold3 server not working?</h2>
+  <p>If the server, the WiFi or the Google login fails on the day, you can still do every step of the analysis from pre-computed results. Download the zip for the step you are on, unzip it, and carry on with the exercise as written. Each zip has a short README.</p>
+  <ul class="downloads">
+    <li><a class="btn small" href="downloads/ARL13B_results.zip" download>ARL13B_results.zip</a><span class="what">Part 1: both ARL13B jobs (apo and GTP + Mg<sup>2+</sup>), five models each, plus the PAE plot.</span><span class="size">1.0 MB</span></li>
+    <li><a class="btn small" href="downloads/IFT52_46_results.zip" download>IFT52_46_results.zip</a><span class="what">Part 2, Sections 3–4: the full-length IFT52 + IFT46 job, top model, scores and PAE plot.</span><span class="size">1.2 MB</span></li>
+    <li><a class="btn small" href="downloads/IFT52_46_trunc_results.zip" download>IFT52_46_trunc_results.zip</a><span class="what">Part 2, Sections 5–6: the truncated job and the 4UZZ crystal structure. Open it only after you have chosen your own residue ranges.</span><span class="size">0.7 MB</span></li>
+  </ul>
+
+  <h2>Useful links</h2>
+  <ul class="links">
+    <li><a href="https://alphafoldserver.com" target="_blank" rel="noopener">AlphaFold3 server</a> (alphafoldserver.com)</li>
+    <li><a href="https://alphafold.ebi.ac.uk" target="_blank" rel="noopener">AlphaFold Protein Structure Database</a> (EBI)</li>
+    <li><a href="https://pymol.org/edu/" target="_blank" rel="noopener">PyMOL educational build</a></li>
+  </ul>
+</section>
+
+<!-- ================================================================= -->
+<!-- PART 1                                                            -->
+<!-- ================================================================= -->
+<section id="tab-part1" class="panel" role="tabpanel" hidden>
+
+  <div class="part-head">
+    <p class="eyebrow">Computer exercise, Part 1</p>
+    <h2 class="title">Predicting the structure of a ciliary GTPase</h2>
+    <p class="sub">with the AlphaFold3 server</p>
+    <a class="btn small" href="pdf/ARL13B_exercise.pdf" target="_blank" rel="noopener">Open as PDF</a>
+  </div>
+
+  <h3 class="sec">Aim of this exercise</h3>
+  <p>In this exercise you will make and interpret your own protein structure predictions using the <strong>AlphaFold3 web server</strong>, using the ciliary GTPase <strong>ARL13B</strong> as an example (a protein many of you will recognise as a widely used marker for the ciliary membrane). You will:</p>
+  <ul>
+    <li>submit two predictions: ARL13B alone (<em>apo</em>) and ARL13B with a bound <strong>GTP</strong> and <strong>Mg<sup>2+</sup></strong> ligand (<em>holo</em>);</li>
+    <li>read the <strong>pLDDT</strong> (per-residue confidence) and <strong>pTM</strong> (global fold) scores, in the browser and in <strong>PyMOL</strong>;</li>
+    <li>use the five predicted models that AF output to see which parts of the protein are reliable (the core fold) and which are not (the flexible termini);</li>
+    <li>probe how binding a ligand influences AlphaFold's confidence in the flexible <strong>switch regions</strong>;</li>
+    <li>take a first look at the <strong>PAE</strong> plot as a measure of how well the relative positions of different parts of a model are known.</li>
+  </ul>
+
+  <h3 class="sec" id="p1-s1"><span class="n">1</span>Background: ARL13B</h3>
+  <p>ARL13B is a small GTPase of the ARF/ARL family that localises to the ciliary membrane; loss-of-function mutations cause the ciliopathy Joubert syndrome. Like all small GTPases it has a compact <strong>G-domain</strong> that binds guanine nucleotide (GDP/GTP) and a Mg<sup>2+</sup> ion, with two mobile <strong>switch</strong> loops that respond to the nucleotide. In addition:</p>
+  <ul>
+    <li>Two cysteines near the <strong>N-terminus</strong> (Cys8/Cys9) are palmitoylated, anchoring ARL13B to the ciliary membrane as a peripheral membrane protein. This stable membrane association is what makes it such a good marker for staining cilia.</li>
+    <li>The long <strong>C-terminal extension</strong> is largely disordered and carries a ciliary-targeting motif.</li>
+  </ul>
+  <p>The folded G-domain spans roughly residues 20–240; beyond about residue 250 the long C-terminal extension is largely disordered (about half of the whole protein).</p>
+
+  <h3 class="sec" id="p1-s2"><span class="n">2</span>Getting started</h3>
+  <div class="box task"><span class="lbl">Task</span> Open a browser, go to <a href="https://alphafoldserver.com" target="_blank" rel="noopener">https://alphafoldserver.com</a> and sign in with a Google account. The server is free for non-commercial use.</div>
+
+  <h3 class="sec" id="p1-s3"><span class="n">3</span>Submit two predictions</h3>
+  <p>Submit <strong>both</strong> jobs now, so they compute while we go through the theory.</p>
+
+  <div class="job">
+    <div class="job-head">
+      <span class="job-tag">Job 1 · apo</span>
+      <span>Job name: <code class="inline-copy" data-copy="ARL13B_apo">ARL13B_apo</code></span>
+    </div>
+    <p>Start a new job, add one <strong>protein</strong> entity, paste the sequence below, name it <code>ARL13B_apo</code>, and run it.</p>
+    <div class="seq" data-label="HsARL13B">
+      <div class="seq-head"><strong>HsARL13B sequence</strong> <span class="len"></span><button class="copy">Copy sequence</button></div>
+      <pre>MFSLMASCCGWFKRWREPVRKVTLLMVGLDNAGKTATAKGIQGEYPEDVAPTVGFSKINLRQGKFEVTIFDLGGGIRIRGIWKNYYAESYGVIFVVDSSDEERMEETKEAMSEMLRHPRISGKPILVLANKQDKEGALGEADVIECLSLEKLVNEHKCLCQIEPCSAISGYGKKIDKSIKKGLYWLLHVIARDFDALNERIQKETTEQRALEEQEKQERAERVRKLREERKQNEQEQAELDGTSGLAELDPEPTNPFQPIASVIIENEGKLEREKKNQKMEKDSDGCHLKHKMEHEQIETQGQVNHNGQKNNEFGLVENYKEALTQQLKNEDETDRPSLESANGKKKTKKLRMKRNHRVEPLNIDDCAPESPTPPPPPPPVGWGTPKVTRLPKLEPLGETHHNDFYRKPLPPLAVPQRPNSDAHDVIS</pre>
+    </div>
+  </div>
+
+  <div class="job">
+    <div class="job-head">
+      <span class="job-tag">Job 2 · holo</span>
+      <span>Job name: <code class="inline-copy" data-copy="ARL13B_GTP">ARL13B_GTP</code></span>
+    </div>
+    <p>Start another new job and set up three entities:</p>
+    <table class="entities">
+      <tr><th>Entity</th><th>Type</th><th>What to enter</th></tr>
+      <tr><td>1</td><td>Protein</td><td>the same HsARL13B sequence as Job 1</td></tr>
+      <tr><td>2</td><td>Ligand</td><td>select <strong>GTP</strong></td></tr>
+      <tr><td>3</td><td>Ion</td><td>select <strong>Mg<sup>2+</sup></strong></td></tr>
+    </table>
+    <p>Name it <code>ARL13B_GTP</code> and run it.</p>
+  </div>
+
+  <div class="box note"><span class="lbl">Note</span> Each job may take a few minutes to a while depending on server load. Time for a short introduction to AlphaFold3 while your jobs are running.</div>
+  <div class="box info fallback"><strong>Server not working?</strong> Download the pre-computed results instead: <a href="downloads/ARL13B_results.zip" download>ARL13B_results.zip</a> (1.0 MB, both jobs).</div>
+
+  <h3 class="sec" id="p1-s4"><span class="n">4</span>While it runs: what is AlphaFold doing?</h3>
+  <p>AlphaFold does not simulate folding. It has learned, from the whole Protein Data Bank, to predict 3D coordinates directly from sequence and from an alignment of related sequences. Crucially it also predicts <em>how confident it is</em>:</p>
+  <ul>
+    <li><strong>pLDDT</strong>: a <em>per-residue</em> score (0–100); the model is coloured by it. High = the local geometry is reliable.</li>
+    <li><strong>pTM</strong>: one <em>global</em> score (0–1) for the overall fold and domain arrangement.</li>
+  </ul>
+
+  <h3 class="sec" id="p1-s5"><span class="n">5</span>First look in the browser: pLDDT and pTM</h3>
+  <p>When <code>ARL13B_apo</code> finishes, open it. The 3D viewer colours the model by pLDDT, on the AlphaFold scale:</p>
+  <table class="plddt">
+    <tr><td><span class="sw" style="background:#0053d6"></span><strong>blue</strong></td><td>very high (pLDDT &gt; 90)</td></tr>
+    <tr><td><span class="sw" style="background:#65cbef"></span><strong>cyan</strong></td><td>confident (90 ≥ pLDDT &gt; 70)</td></tr>
+    <tr><td><span class="sw" style="background:#ffdb46"></span><strong>yellow</strong></td><td>low (70 ≥ pLDDT &gt; 50)</td></tr>
+    <tr><td><span class="sw" style="background:#ff7d45"></span><strong>orange</strong></td><td>very low (pLDDT ≤ 50)</td></tr>
+  </table>
+  <div class="box task"><span class="lbl">Question</span> Rotate the model and look at the pLDDT colouring: which parts are blue/cyan and which are yellow/orange? Then compare this with what you know about ARL13B from Section 1: do the confident and the low-confidence regions match the folded G-domain and the disordered C-terminal extension? The result also reports a single overall <strong>pTM</strong>: for a protein that is half-folded and half-disordered, what might one global number hide?</div>
+
+  <h3 class="sec" id="p1-s6"><span class="n">6</span>Open the models in PyMOL</h3>
+  <p>The server returns <strong>five</strong> models per job (ranked by confidence). Download the <code>ARL13B_apo</code> results and unpack the zip. You will find five model coordinate files (<code>*.cif</code>) plus the confidence data.</p>
+  <div class="box task"><span class="lbl">Task</span> Open PyMOL and load all five apo models (drag the five <code>.cif</code> files into the PyMOL window, or use <code>File &gt; Open</code>). Each loads as its own object.</div>
+  <p>The five files load with long names (based on what you called your job), so typing out alignment commands is fiddly. Instead, use the one built-in command that superposes <em>every</em> loaded object onto the first one, whatever they are named. Just type:</p>
+  <div class="code"><button class="copy">Copy</button><pre>alignto</pre></div>
+  <div class="box task"><span class="lbl">Question</span> Where do the five models agree, and where do they fan apart? What do you think it means about a region when all five independent predictions land in the same place, versus when they scatter? Now compare the regions that scatter here with the regions that were yellow/orange in the browser: what is the relationship, and why would those two things go together?</div>
+
+  <h3 class="sec" id="p1-s7"><span class="n">7</span>Colour by confidence in PyMOL</h3>
+  <p>For AlphaFold models the per-residue pLDDT is stored in the B-factor column, so you can reproduce the AlphaFold colouring. The model is already shown as cartoon, so just colour it (orange = low confidence, blue = high):</p>
+  <div class="code"><button class="copy">Copy</button><pre>spectrum b, orange_yellow_cyan_blue, minimum=40, maximum=100</pre></div>
+  <p>Optionally, make the cartoon thickness track confidence as well:</p>
+  <div class="code"><button class="copy">Copy</button><pre>cartoon putty</pre></div>
+  <div class="box note"><span class="lbl">Note</span> This colouring is specific to AlphaFold models, where the B-factor holds pLDDT (0–100, high = good). In an <em>experimental</em> structure the B-factor means something different (atomic displacement / disorder, high = worse), and you would colour it on a different scale, e.g. <code>spectrum b, blue_white_red, minimum=20, maximum=50</code>.</div>
+
+  <h3 class="sec" id="p1-s8"><span class="n">8</span>The switch regions: apo versus GTP-bound</h3>
+  <p>Every small GTPase has <strong>two</strong> switch loops. <strong>Switch I</strong> carries a conserved threonine (here Thr52) that coordinates the Mg<sup>2+</sup> and the nucleotide γ-phosphate; <strong>switch II</strong> follows the conserved DxxG motif (here from Asp71). These loops sense whether a nucleotide is bound. Select them in your apo model and put them on the confidence scale:</p>
+  <div class="code"><button class="copy">Copy</button><pre>select switchI, resi 45-54
+select switchII, resi 71-86
+spectrum b, orange_yellow_cyan_blue, minimum=40, maximum=100
+show sticks, (switchI or switchII) and not name C+N+O</pre></div>
+  <div class="box task"><span class="lbl">Question</span> Find switch I (around residues 45–54) in the apo model. How confident is it compared with the rigid core of the domain? Switch I's job is to sense the nucleotide, so why might AlphaFold struggle to pin down its structure when the pocket is empty? What would you predict happens to it once GTP is bound?</div>
+  <p>Now bring in the second prediction.</p>
+  <div class="box task"><span class="lbl">Task</span> Download and unpack <code>ARL13B_GTP</code> and load a model into the <em>same</em> PyMOL session (do not open a new one). You now have both apo and holo loaded; switch the apo objects off with their checkboxes in the object panel on the right, so only the GTP model shows. Colour it by pLDDT with the same command as before. The GTP and Mg<sup>2+</sup> are shown automatically; do not run <code>as cartoon</code>, which would hide them.</div>
+  <div class="box task"><span class="lbl">Question</span> Where did AlphaFold place the <strong>GTP</strong> and the Mg<sup>2+</sup>: is it a sensible pocket, and does the ion sit where you would expect relative to the phosphates? (AlphaFold3 has predicted the ligand and the ion, not just the protein chain.) Look at which protein residues line the pocket: can you spot any recognisable GTPase sequence motifs among them?</div>
+  <div class="box task"><span class="lbl">Question</span> Recall your prediction from the apo section. Now look again at <strong>switch I</strong> in the GTP model: did its confidence change, and in which direction? Compare switch I with switch II: did they behave the same way? If not, what might explain the difference between the two loops?</div>
+  <div class="box note"><span class="lbl">Think about it</span> You have just watched one region change confidence simply by adding a ligand. So what does a low pLDDT actually tell you: that the prediction is <em>wrong</em>, or something else? Can you think of a case where low confidence is biologically <em>informative</em> rather than a failure?</div>
+  <div class="box note"><span class="lbl">Note</span> When everyone is done, we switch to a short summary presentation.</div>
+
+  <div class="box info">
+    <p><strong>That is the core of Part 1.</strong> You have made two predictions and learned to read the pLDDT colouring, the spread of the five models, and how a flexible region can order up when a ligand binds.</p>
+    <p><strong>Finished early?</strong> The optional section below introduces the <strong>PAE</strong>, the score we build on in Part 2, so it is a head start while others catch up.</p>
+  </div>
+  <p class="takehome">Take-home: pLDDT is local; the spread of the five models is the uncertainty; low confidence (orange) means do not trust the local structure, including "helices"; a flexible region can order up when it binds a ligand or partner.</p>
+
+  <h3 class="sec" id="p1-s9"><span class="n">9</span>Optional extension: the PAE</h3>
+  <p><em>Only if you finish the core exercise with time to spare.</em></p>
+  <div class="box task"><span class="lbl">Task</span> First work out for yourself what the <strong>Predicted Aligned Error (PAE)</strong> is and what it reports on (see the AlphaFold server's own help). Then test it on your <code>ARL13B_GTP</code> model.</div>
+  <p>pLDDT is <em>local</em>: it says nothing about whether two parts of the model are placed correctly <em>relative to each other</em>. That is what the PAE adds. In the plot the colour at (x, y) is the expected error in residue x once the model is aligned on residue y: dark = low error (relative position trusted), light = high error.</p>
+  <div class="box task"><span class="lbl">Question</span> Open the PAE plot for <code>ARL13B_GTP</code>. Where is the error low and where is it high? Match those dark and light regions back to what you already know about this protein: which parts should be locked rigidly together, and which should be free to float? Does the plot agree with that expectation? The result also reports an <strong>ipTM</strong> for the ligand: what do you think that number is measuring, and would it make you trust where the GTP was placed?</div>
+
+  <a class="box info next" href="#part2">
+    <strong>Coming next (Part 2): predicting and validating a complex →</strong><br>
+    We will predict a <em>protein–protein complex</em> and use the PAE and ipTM across the interface to judge whether the predicted interaction is real.
+  </a>
+</section>
+
+<!-- ================================================================= -->
+<!-- PART 2                                                            -->
+<!-- ================================================================= -->
+<section id="tab-part2" class="panel" role="tabpanel" hidden>
+
+  <div class="part-head">
+    <p class="eyebrow">Computer exercise, Part 2</p>
+    <h2 class="title">Predicting and validating a complex</h2>
+    <p class="sub">the IFT52:IFT46 interaction, and how to read the PAE</p>
+    <a class="btn small" href="pdf/IFT_complex_exercise.pdf" target="_blank" rel="noopener">Open as PDF</a>
+  </div>
+
+  <h3 class="sec">Aim of this exercise</h3>
+  <p>In Part 1 you predicted the 3D structure of a single protein and learned to read the pLDDT and pTM confidence scores. A prediction becomes far more powerful when you ask it about a <strong>complex</strong>: do two proteins actually bind, and if so, how? Here you will predict the 3D structure of a real ciliary complex, the two intraflagellar-transport proteins <strong>IFT52</strong> and <strong>IFT46</strong>, and judge whether AlphaFold's predicted interaction can be trusted. You will meet a low overall score, work out for yourself whether a real interface hides behind it, and then test your idea by re-predicting a minimal complex. The key tools are the <strong>PAE</strong> plot and the <strong>ipTM</strong> score.</p>
+
+  <h3 class="sec" id="p2-s1"><span class="n">1</span>Submit the complex prediction</h3>
+  <div class="box task"><span class="lbl">Task</span> On <a href="https://alphafoldserver.com" target="_blank" rel="noopener">alphafoldserver.com</a>, start a new job and add <strong>two protein entities</strong>: paste the IFT52 sequence into the first and the IFT46 sequence into the second. Name the job <code>IFT52_46</code> and run it, then leave it computing.</div>
+  <p>These are the full-length <em>Chlamydomonas</em> sequences for IFT52 and IFT46. Working with the whole proteins is deliberate: part of the exercise is deciding for yourself which parts of them matter.</p>
+
+  <div class="job">
+    <div class="job-head">
+      <span class="job-tag">Complex job</span>
+      <span>Job name: <code class="inline-copy" data-copy="IFT52_46">IFT52_46</code></span>
+    </div>
+    <div class="seq">
+      <div class="seq-head"><strong>Entity 1 · CrIFT52</strong> <span class="len"></span><button class="copy">Copy sequence</button></div>
+      <pre>MEEPGAEEVRILFSTAKGESHTHKAGFKQLFRRLRSTYRPDKVDKDDFTLDTLRSAHILVLGGPKEKFTAPEVDMLKKFVKNGGSILILMSEGGEEKAGTNINYFLEQFGMSVNNDAVVRTTHYKYLHPKEVLISDGILNRAVITGAGKSLNSNDDDEFRVSRGPQAFDGTGLEYVFPFGATLSVQKPAVPVLSSGKIAYPMNRPVGAVWAQPGYGRIAVLGSCAMFDDKWLDKEENSKIMDFFFKFLKPHSKIQLNDIDAEEPDVSDLKLLPDTASLADKLKGCLQEIDDVPRDWTSLFDDSLFKFDTGLIPEAVSLYEKLGVKKGQLNLIPPSFETPLPPLQPAVFPPTIREPPPPALLELFDLDESFASETNRLASLTNKCHGEEDLEYYIMEAGHILGLKLQENANAKHVLSEVFRRIAQYKMGSLGLGQTLDSMGQTLPAANQFGDQFEL</pre>
+    </div>
+    <div class="seq">
+      <div class="seq-head"><strong>Entity 2 · CrIFT46</strong> <span class="len"></span><button class="copy">Copy sequence</button></div>
+      <pre>MDDSMDYPDRDGDDLDQFQGTARSQVVQNQPHDEEVNLSESESFAGADEPPAAPRDASLIESHDMDEGPAAPARTLSPTGYEAGKHAPGGIANSDEAPPGAYNAQEYKHLNVGEDVRELFSYIGRYKPQTVELDTRIKPFIPDYIPAVGGIDEFIKVPRPDTKPDYLGLKVLDEPAAKQSDPTVLTLQLRQLSKEAPGAKADMVGRLEHTDENKAKKIQQWIASINDIHKAKPAATVNYSKRMPEIEALMQEWPPEVETFLKTMHMPSGDVELDIKTYARLVCTLLDIPVYDDPVESLHVLFTLYLEFKNNPIFRQHMEMENKLDGMSGGGGGMMGGGADVLGL</pre>
+    </div>
+  </div>
+
+  <div class="box note"><span class="lbl">Note</span> Once everyone has submitted, we pause here for a short presentation on how to judge a predicted complex: the <strong>PAE</strong> plot and the <strong>ipTM</strong> score. After that, keep working through the sections below while your job runs.</div>
+
+  <h3 class="sec" id="p2-s2"><span class="n">2</span>While it runs: practise reading a PAE plot</h3>
+  <p>You have just seen what the <strong>Predicted Aligned Error (PAE)</strong> reports: for a pair of residues, how sure AlphaFold is about their position <em>relative to each other</em> (dark = confident, light = not). AlphaFold has already predicted the structure of over 214 million proteins, essentially every sequence in the UniProt database, and more recently almost 80,000 high-confidence protein complexes; you can look them up on the EBI AlphaFold database. Practise reading the PAE on two of them before you turn to your own complex.</p>
+
+  <h4 class="subsec"><span class="n">2.1</span>Two folded domains that do NOT interact</h4>
+  <div class="box task"><span class="lbl">Task</span> Open <a href="https://alphafold.ebi.ac.uk/entry/Q9Y223" target="_blank" rel="noopener">alphafold.ebi.ac.uk</a>, search for the human protein <strong>GNE</strong> (accession <code>Q9Y223</code>), and find the <strong>Predicted Aligned Error</strong> viewer. The plot is reproduced below so you can also do this offline.</div>
+  <figure><img src="assets/combo_gne.jpg" alt="GNE (Q9Y223): AlphaFold model coloured by pLDDT, and its PAE plot" loading="lazy"></figure>
+  <p>GNE has two well-folded domains (each pLDDT &gt; 90, blue) joined by a flexible linker (orange). The structure is coloured by pLDDT, the PAE is on the right.</p>
+  <div class="box task"><span class="lbl">Question</span> Aligning on a residue in the first domain (~300), are you confident about another residue in the <em>same</em> domain (~200)? About a residue in the <em>other</em> domain (~600)? Each domain scores high pLDDT on its own, so what is the off-diagonal block telling you that pLDDT alone did not? Do the two domains have a fixed position relative to each other?</div>
+
+  <h4 class="subsec"><span class="n">2.2</span>A protein whose parts ARE locked together</h4>
+  <div class="box task"><span class="lbl">Task</span> Now look up the human tyrosine kinase <strong>SRC</strong> (accession <a href="https://alphafold.ebi.ac.uk/entry/P12931" target="_blank" rel="noopener"><code>P12931</code></a>). Its PAE is shown below.</div>
+  <figure><img src="assets/combo_src.jpg" alt="SRC (P12931): AlphaFold model coloured by pLDDT, and its PAE plot" loading="lazy"></figure>
+  <p>SRC has three folded domains, SH3 (residues 84–145), SH2 (151–248) and a kinase domain (~267–520), shown in blue, preceded by a long disordered N-terminal region (~1–83, orange). Structure coloured by pLDDT on the left, PAE on the right.</p>
+  <div class="box task"><span class="lbl">Question</span> Read this plot the same way. Compared with GNE, what is different about the large off-diagonal region among the folded domains? Which residues, by contrast, stay light against everything else, and what does that tell you about that part of the protein? In one sentence: which parts of SRC are held in a fixed position relative to each other, and which are not?</div>
+
+  <div class="box info">
+    <p><strong>The step to carry over to your complex.</strong> Two <em>domains of one protein</em> and two <em>chains of a complex</em> read the same way. In a two-protein job, look at the off-diagonal block <em>between the chains</em>: <strong>dark</strong> = a real, confident interface (like SRC's folded core); <strong>light</strong> = the parts float apart (like GNE's two domains). The single number that summarises it is the <strong>ipTM</strong> (&gt;0.8 confident, 0.6–0.8 borderline, &lt;0.6 do not trust).</p>
+  </div>
+
+  <h3 class="sec" id="p2-s3"><span class="n">3</span>Examine your complex</h3>
+  <h4 class="subsec"><span class="n">3.1</span>Open the top model and its PAE</h4>
+  <div class="box task"><span class="lbl">Task</span> Download the <code>IFT52_46</code> results and unpack the zip. Open the top-ranked model (the <code>…model_0.cif</code> file) in PyMOL, and on the AF3 server open the <strong>PAE plot</strong> for the same job.</div>
+  <div class="box info fallback"><strong>Server not working?</strong> Download the pre-computed full-length result: <a href="downloads/IFT52_46_results.zip" download>IFT52_46_results.zip</a> (1.2 MB, top model, scores and PAE plot).</div>
+  <div class="box task"><span class="lbl">Question</span> Is the whole inter-chain region of the PAE light, or is there a <em>compact dark block</em> somewhere in it? If there is a block, which stretch of each chain does it cover? Putting the plot together with the structure, do the two proteins interact, and if so, which parts of them?</div>
+
+  <h4 class="subsec"><span class="n">3.2</span>Now read the ipTM</h4>
+  <div class="box task"><span class="lbl">Question</span> Finally, read the <strong>ipTM</strong> for the top model. Is it high and confident? If not, why not, given what you have just seen? The ipTM is a single average over <em>all</em> residue pairs between the two chains: if only a small part of each protein forms the interface and the rest does not, how does that pull the average down? Does a low ipTM here mean the two proteins do not interact?</div>
+
+  <h3 class="sec" id="p2-s4"><span class="n">4</span>Which residues form the interface?</h3>
+  <p>You have found that the two proteins touch in a specific region. Now pin down exactly which residues. In the top model (chain A = IFT52, chain B = IFT46), let PyMOL pick the contacting residues:</p>
+  <div class="code"><button class="copy">Copy</button><pre>select ifaceA, byres (chain A within 5 of chain B)
+select ifaceB, byres (chain B within 5 of chain A)
+iterate ifaceA and name CA, print("IFT52", resi)
+iterate ifaceB and name CA, print("IFT46", resi)</pre></div>
+  <p>Now show the interface residues as sticks, colour the two chains differently, and let PyMOL draw the polar contacts (hydrogen bonds and salt bridges) between them as yellow dashes:</p>
+  <div class="code"><button class="copy">Copy</button><pre>show sticks, (ifaceA or ifaceB) and not name N+C+O
+color skyblue, chain A and elem C
+color lightorange, chain B and elem C
+distance polar, ifaceA, ifaceB, mode=2
+hide labels, polar
+zoom ifaceA or ifaceB</pre></div>
+  <div class="box task"><span class="lbl">Question</span> First, read off the residue ranges for each chain. Do they match the stretches of IFT52 and IFT46 that formed the dark inter-chain block in the PAE plot?</div>
+  <div class="box task"><span class="lbl">Question</span> Second, examine the interface in detail. What holds the two proteins together: is it mainly hydrophobic side chains packing against each other, hydrogen bonds, salt bridges between charged residues, or a mix? Find an example of each kind you see, and note which residues are involved.</div>
+
+  <h3 class="sec" id="p2-s5"><span class="n">5</span>Test it: predict a minimal complex</h3>
+  <p>You now have a hypothesis: the interaction lives in the region you just found, and the rest of each protein is only diluting the score. Test it.</p>
+  <div class="box task"><span class="lbl">Task</span> Submit a new AF3 job containing <em>only</em> the interacting parts you identified (the residue ranges of IFT52 and of IFT46 that make the contacts). Name it <code class="inline-copy" data-copy="IFT52_46_trunc">IFT52_46_trunc</code>.</div>
+
+  <div class="tool">
+    <div class="tool-head"><strong>Sequence trimmer</strong> <span>Enter the residue ranges you found; the trimmed sequence is ready to paste into the server.</span></div>
+    <div class="trim" data-src="ift52">
+      <label>IFT52 (1–455): residues <input type="number" min="1" max="455" class="from" placeholder="from"> to <input type="number" min="1" max="455" class="to" placeholder="to"></label>
+      <div class="seq out"><div class="seq-head"><strong>Entity 1 · CrIFT52 fragment</strong> <span class="len"></span><button class="copy" disabled>Copy sequence</button></div><pre class="muted">Enter a range above.</pre></div>
+    </div>
+    <div class="trim" data-src="ift46">
+      <label>IFT46 (1–344): residues <input type="number" min="1" max="344" class="from" placeholder="from"> to <input type="number" min="1" max="344" class="to" placeholder="to"></label>
+      <div class="seq out"><div class="seq-head"><strong>Entity 2 · CrIFT46 fragment</strong> <span class="len"></span><button class="copy" disabled>Copy sequence</button></div><pre class="muted">Enter a range above.</pre></div>
+    </div>
+  </div>
+
+  <div class="box task"><span class="lbl">Question</span> Before it finishes, <strong>predict</strong>: what will happen to the ipTM now that the non-interacting parts are gone, and what will happen to the <em>shape</em> of the PAE plot? When the job returns, compare it with the full-length result. Were you right? What does the change tell you about what the ipTM was actually measuring before?</div>
+  <div class="box note"><span class="lbl">Note</span> The truncated prediction takes a while to come back. While it runs you do not need to wait: read the final section (a word of caution), and, if you like, try the optional interface analysis below. Return here to compare the two results once the truncated job finishes.</div>
+  <div class="box info fallback"><strong>Server not working?</strong> Once you have chosen your residue ranges, download the pre-computed truncated result: <a href="downloads/IFT52_46_trunc_results.zip" download>IFT52_46_trunc_results.zip</a> (0.7 MB, also contains <code>4uzz.pdb</code> for Section 6).</div>
+
+  <h3 class="sec" id="p2-s6"><span class="n">6</span>A prediction still needs validation</h3>
+  <p>Everything so far builds confidence: you found a compact interface, the PAE backed it up, and truncating to it pushed the ipTM from low to confident. But all of this is still a <strong>prediction</strong>. A convincing PAE and a good ipTM make a strong hypothesis, not a proven fact. Before you build on a predicted interface, it has to be tested experimentally: treat every AlphaFold complex as a lead to be confirmed, not as the answer.</p>
+  <p>This particular interface happens to have been confirmed: the C-terminal domains of IFT52 and IFT46 were solved by X-ray crystallography (PDB <a href="https://www.rcsb.org/structure/4UZZ" target="_blank" rel="noopener"><code>4UZZ</code></a>), so here you can check your prediction directly.</p>
+  <div class="box task"><span class="lbl">Task</span> <em>If time permits.</em> In PyMOL, fetch the experimental structure and superpose your complex onto it (your truncated model is cleanest). Replace <code>&lt;your model&gt;</code> with the object name of your model in PyMOL's object panel.</div>
+  <div class="code"><button class="copy">Copy</button><pre>fetch 4uzz
+super &lt;your model&gt;, 4uzz</pre></div>
+  <div class="box task"><span class="lbl">Question</span> Does your predicted interface land on the experimental one, and what RMSD do you get? The crystal structure is from a different organism, so expect a small offset of a couple of Å rather than zero.</div>
+
+  <p class="takehome">Take-home messages: pLDDT is local; the PAE and ipTM describe relative position and interfaces; ipTM is a <em>global</em> average, so a real but localized interface can hide behind a low ipTM: read the PAE, find the block, and test it by re-predicting a minimal complex; and even a convincing prediction stays a hypothesis until it is confirmed experimentally.</p>
+
+  <div class="box info">
+    <p><strong>Optional: read the interface straight from the numbers.</strong> You just picked the interface residues off the structure. The same interface is already in the PAE, as numbers. Write a short Python script that opens the <code>*_full_data_*.json</code> file, reads the PAE matrix, and lists the <em>inter-chain</em> residue pairs whose PAE is below about 5 Å (use the <code>token_chain_ids</code> entry in the file to tell the two chains apart). Do those low-PAE pairs fall in the same region you found by contacts in PyMOL? If you are comfortable with Python you can do this yourself; otherwise a coding assistant (an LLM) will get you there quickly.</p>
+  </div>
+
+  <div class="box info">
+    <p><strong>Optional genius task: build a better ipTM.</strong> You have seen that the ipTM undersells a real but small interface between two large proteins. Now that you can read the PAE matrix from the json file, try to fix that.</p>
+    <p>How AlphaFold computes the ipTM, in short: for a residue <var>i</var> in one chain, it turns the PAE to every residue <var>j</var> in the <em>other</em> chain into a score between 0 and 1,</p>
+    <p class="formula"><var>f</var><sub><var>ij</var></sub> = 1 / (1 + (PAE<sub><var>ij</var></sub> / <var>d</var><sub>0</sub>)<sup>2</sup>), &nbsp;&nbsp; <var>d</var><sub>0</sub> = 1.24 (<var>N</var> − 15)<sup>1/3</sup> − 1.8</p>
+    <p>and averages <var>f</var><sub><var>ij</var></sub> over all those <var>j</var>. The ipTM is the highest such average over all residues <var>i</var>. <var>N</var> is the total number of residues in the complex.</p>
+    <p>One thing in this recipe punishes a small interface on large proteins: find it and fix it. Then ask whether <var>d</var><sub>0</sub>, which depends on <var>N</var>, still makes sense for the residues you are now scoring, and adjust it. Write your own score. Test it on both your full-length and your truncated prediction: does your score give similar values for the two, where the ipTM did not?</p>
+    <p class="ref">See Dunbrack, R.L. (2025). Rēs ipSAE loquunt: What's wrong with AlphaFold's ipTM score and how to fix it. bioRxiv, <a href="https://doi.org/10.1101/2025.02.10.637595" target="_blank" rel="noopener">doi:10.1101/2025.02.10.637595</a>, for help.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap site-footer">
+  Cilia Connect 2026 · AI Structure Prediction Workshop · Aarhus University
+</footer>
+
+<div id="toast" role="status" aria-live="polite" hidden>Copied</div>
+<script src="app.js"></script>
+</body>
+</html>
