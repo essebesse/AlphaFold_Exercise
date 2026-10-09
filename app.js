@@ -1,5 +1,5 @@
 // ---------- tabs (hash based, so #part1 / #part2 links can be shared) ----------
-const TABS = ["start", "part1", "part2", "offline"];
+const TABS = ["start", "part1", "part2", "slides", "offline"];
 
 function tabFor(hash) {
   const id = (hash || "").replace("#", "");
